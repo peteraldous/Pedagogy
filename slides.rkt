@@ -5,8 +5,13 @@
 (slide #:title "Racket - a crash course")
 
 (slide #:title "What is Racket?"
-       (t "Scheme with useful libraries"))
-(slide #:title "DrRacket howto")
+       (t "Scheme with useful libraries")
+       (t "(plus some other stuff)"))
+(slide #:title "DrRacket howto"
+       ; definitions window
+       ; interactions window
+       ; help desk
+       )
 (slide #:title "Command-line Racket howto"
        #;(item "Add to $PATH if necessary")
        #;(item "Why the errors?"))
@@ -46,8 +51,12 @@
              (it "body-expr")
              (tt "...)")))
 (slide #:title "Scheme Basics"
-       (item "define")
-       (item "let"))
+       (item (tt "(define") (it "name value") (tt ")"))
+       (item (tt "(let ([")
+             (it "name value")
+             (tt "] ...)")
+             (it "body ...")
+             (tt ")")))
 (slide #:title "Putting it all together"
        (item ""))
 (slide #:title "List operations"
@@ -56,9 +65,19 @@
 (slide #:title "Module System"
        ; maybe show racket doc to demonstrate how to know what to import
        (para (tt "(require") (it "module") (tt ")")))
-(slide #:title "quasiquotes")
-(slide #:title "(read)")
-(slide #:title "match construct")
+(slide #:title "(read)"
+       (para (begin
+                (write (list 1 2 3))
+                (printf "~n")
+                (define temp-file (build-path (current-directory) "temp"))
+                (with-output-to-file #:exists 'replace temp-file
+                  (λ () (write (list 1 2 3))))
+                (define my-list (with-input-from-file temp-file read))
+                (first my-list)
+                (second my-list)
+                (third my-list)
+                (delete-file temp-file))))
+(slide #:title "match construct and quasiquotes")
 (slide #:title "regular expressions")
 (slide #:title "structs")
 
