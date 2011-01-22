@@ -2,6 +2,14 @@
 
 (require slideshow/code)
 
+; shamelessly copied from Matt Might
+; http://matt.might.net/teaching/compilers/spring-2011/lectures/racket-lecture.rkt
+(define-syntax code-reduce
+  (syntax-rules ()
+    ((_ exp) 
+     (let ((t exp))
+       (hb-append (code exp) (tt " => ") (code (unsyntax t)))))))
+
 (slide #:title "Racket - a crash course")
 
 (slide #:title "What is Racket?"
@@ -13,6 +21,8 @@
        ; help desk
        )
 (slide #:title "Command-line Racket howto"
+       (item "racket")
+       (item "raco")
        #;(item "Add to $PATH if necessary")
        #;(item "Why the errors?"))
 (slide #:title "Scheme Basics"
@@ -20,10 +30,10 @@
        (para "s-expressions:")
        'next
        (item "atoms"
-             (item "numbers")
-             (item "arrays")
-             (item "strings")
-             (item "symbols"))
+             (subitem "numbers")
+             (subitem "arrays")
+             (subitem "strings")
+             (subitem "symbols"))
        ; what is #:title? is that an addition by Racket?
        ; identifiers are symbols, right?
        'next
@@ -31,8 +41,13 @@
        'next
        (t "Yes, this really is all there is."))
 (slide #:title "Scheme Basics"
+       (para "Function application:")
+       (item (tt "(") (it "fun arg ...") (tt ")"))
+       'next
+       (item (code-reduce (+ 4 5))))
+(slide #:title "Scheme Basics"
        (para "Lists:"
-             (item (tt "empty"))
+             (item (code empty))
              (item "A pair of a value and a list")))
 (slide #:title "Scheme Basics"
        (para "List construction:"
@@ -60,30 +75,62 @@
 (slide #:title "Putting it all together"
        (item ""))
 (slide #:title "List operations"
-       (item (tt "(map)"))
-       (item (tt "(foldl)")))
+       (item (t "Syntax:")
+             (para (tt "(map") (it "proc list ...") (tt ")")))
+       (item (t "Examples:")
+             (para (code-reduce (map add1 (list 2 3 4))))
+             (para (code-reduce (map * (list 2 3 4)
+                                     (list 1 2 3))))))
+(slide #:title "List operations"
+       (item (t "Syntax:")
+             (para (tt "(foldl") (it "proc init list ...") (tt ")")))
+       (item (t "Examples:")
+             (para (code-reduce (foldl + 0 (list 1 2 3 4 5))))
+             (para (code-reduce (foldl * 1 (list 1 2 3 4 5))))))
 (slide #:title "Module System"
        ; maybe show racket doc to demonstrate how to know what to import
-       (para (tt "(require") (it "module") (tt ")")))
-(slide #:title "(read)"
-       (let ([read-code '(begin
-                          (write (list 1 2 3))
-                          (printf "~n")
-                          (let ([temp-file (build-path
-                                            (current-directory)
-                                            "temp")])
-                            (with-output-to-file #:exists 'replace temp-file
-                              (λ () (write (list 1 2 3))))
-                            (let ([my-list (with-input-from-file
-                                               temp-file
-                                             read)])
-                              (first my-list)
-                              (second my-list)
-                              (third my-list)
-                              (delete-file temp-file))))])
-         (para (typeset-code read-code))))
-(slide #:title "match construct and quasiquotes")
-(slide #:title "regular expressions")
-(slide #:title "structs")
+       (item (code \#lang racket))
+       (item (tt "(require") (it "module") (tt ")")))
+(slide #:title (para #:align 'center (code (read)) (t "and") (code (write)))
+       (para (code-reduce
+              (let ([temp-file (build-path
+                                (current-directory)
+                                "temp")])
+                (with-output-to-file
+                    #:exists 'replace temp-file
+                  (λ () (write (list 1 2 3))))
+                (with-input-from-file
+                    temp-file
+                  read)))))
+(slide #:title "match construct and quasiquotes"
+       (para (code (match exp
+                     
+                     ; Symbols stay the same:
+                     [(? symbol?)         exp]
+                     
+                     ; Boolean and conditionals:
+                     [#t                  ...]
+                     [#f                  ...]
+                     [`(if ,condi ,t ,f)  ...]
+                     [`(and ,a ,b)        ...]
+                     [`(or ,a ,b)         ...]
+                     
+                     ...
+                     
+                     ; Lambdas:
+                     [`(λ () ,exp)           ...]
+                     [`(λ (,v) ,exp)         ...]
+                     [`(λ (,v ,vs ...) ,exp) ...]
+                     ...))))
+(slide #:title "regular expressions"
+       (para (t "Literals like")
+             (colorize (tt "#rx\"a+\"") (current-literal-color)))
+       (para (code-reduce (regexp-match-positions
+                           #rx"a+"
+                           "banana"))))
+(slide #:title "structs"
+       (item (t "Essentially lists with constructors"))
+       (item (code (write)) (t "and") (code (read))
+             (t "handle structs elegantly")))
 
 (slide)
