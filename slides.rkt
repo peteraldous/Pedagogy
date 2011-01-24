@@ -72,21 +72,29 @@
              (tt "] ...)")
              (it "body ...")
              (tt ")")))
-(slide #:title "Putting it all together"
-       (item ""))
+#;(slide #:title "Putting it all together"
+         (item ""))
 (slide #:title "List operations"
        (item (t "Syntax:")
              (para (tt "(map") (it "proc list ...") (tt ")")))
+       'next
        (item (t "Examples:")
              (para (code-reduce (map add1 (list 2 3 4))))
              (para (code-reduce (map * (list 2 3 4)
                                      (list 1 2 3))))))
 (slide #:title "List operations"
        (item (t "Syntax:")
-             (para (tt "(foldl") (it "proc init list ...") (tt ")")))
+             (para (tt "(foldl") (it "proc init list ...") (tt ")"))
+             (para (tt "(foldr") (it "proc init list ...") (tt ")")))
+       'next
        (item (t "Examples:")
              (para (code-reduce (foldl + 0 (list 1 2 3 4 5))))
              (para (code-reduce (foldl * 1 (list 1 2 3 4 5))))))
+(slide #:title (para #:align 'center (code (foldl)) (t "vs") (code (foldr)))
+       (item (code-reduce (foldl cons empty
+                                 (list 1 2 3 4 5))))
+       (item (code-reduce (foldr cons empty
+                                 (list 1 2 3 4 5)))))
 (slide #:title "Module System"
        ; maybe show racket doc to demonstrate how to know what to import
        (item (code \#lang racket))
