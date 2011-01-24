@@ -92,6 +92,13 @@
        (item (code \#lang racket))
        (item (tt "(require") (it "module") (tt ")")))
 (slide #:title (para #:align 'center (code (read)) (t "and") (code (write)))
+       (item (t "Typical use:")
+             (subitem (tt "(read)"))
+             (subitem (tt "(write") (it "datum") (tt ")")))
+       (item (t "Other use:")
+             (subitem (tt "(read") (it "input-port") (tt ")"))
+             (subitem (tt "(write") (it "datum output-port") (tt ")"))))
+(slide #:title (para #:align 'center (code (read)) (t "and") (code (write)))
        (para (code-reduce
               (let ([temp-file (build-path
                                 (current-directory)
