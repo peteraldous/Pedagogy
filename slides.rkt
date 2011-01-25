@@ -33,13 +33,16 @@
              (subitem "numbers")
              (subitem "arrays")
              (subitem "strings")
-             (subitem "symbols"))
+             (subitem "symbols")
+             (subitem "structs"))
        ; what is #:title? is that an addition by Racket?
        ; identifiers are symbols, right?
        'next
-       (item "lists")
+       (item "lists of s-expressions")
        'next
-       (t "Yes, this really is all there is."))
+       (t "That's it.")
+       'next
+       (t "Really really."))
 (slide #:title "Scheme Basics"
        (para "Function application:")
        (item (tt "(") (it "fun arg ...") (tt ")"))
@@ -79,6 +82,20 @@
              (para (tt "(map") (it "proc list ...") (tt ")")))
        'next
        (item (t "Examples:")
+             (para (code (map add1 (list 2 3 4))))
+             (para (code (map * (list 2 3 4)
+                                     (list 1 2 3))))))
+(slide #:title "List operations"
+       (item (t "Syntax:")
+             (para (tt "(map") (it "proc list ...") (tt ")")))
+       (item (t "Examples:")
+             (para (code-reduce (map add1 (list 2 3 4))))
+             (para (code (map * (list 2 3 4)
+                                     (list 1 2 3))))))
+(slide #:title "List operations"
+       (item (t "Syntax:")
+             (para (tt "(map") (it "proc list ...") (tt ")")))
+       (item (t "Examples:")
              (para (code-reduce (map add1 (list 2 3 4))))
              (para (code-reduce (map * (list 2 3 4)
                                      (list 1 2 3))))))
@@ -88,8 +105,27 @@
              (para (tt "(foldr") (it "proc init list ...") (tt ")")))
        'next
        (item (t "Examples:")
+             (para (code (foldl + 0 (list 1 2 3 4 5))))
+             (para (code (foldl * 1 (list 1 2 3 4 5))))))
+(slide #:title "List operations"
+       (item (t "Syntax:")
+             (para (tt "(foldl") (it "proc init list ...") (tt ")"))
+             (para (tt "(foldr") (it "proc init list ...") (tt ")")))
+       (item (t "Examples:")
+             (para (code-reduce (foldl + 0 (list 1 2 3 4 5))))
+             (para (code (foldl * 1 (list 1 2 3 4 5))))))
+(slide #:title "List operations"
+       (item (t "Syntax:")
+             (para (tt "(foldl") (it "proc init list ...") (tt ")"))
+             (para (tt "(foldr") (it "proc init list ...") (tt ")")))
+       (item (t "Examples:")
              (para (code-reduce (foldl + 0 (list 1 2 3 4 5))))
              (para (code-reduce (foldl * 1 (list 1 2 3 4 5))))))
+(slide #:title (para #:align 'center (code (foldl)) (t "vs") (code (foldr)))
+       (item (code (foldl cons empty
+                                 (list 1 2 3 4 5))))
+       (item (code (foldr cons empty
+                                 (list 1 2 3 4 5)))))
 (slide #:title (para #:align 'center (code (foldl)) (t "vs") (code (foldr)))
        (item (code-reduce (foldl cons empty
                                  (list 1 2 3 4 5))))
@@ -144,7 +180,7 @@
                            #rx"a+"
                            "banana"))))
 (slide #:title "structs"
-       (item (t "Essentially lists with constructors"))
+       (item (t "Essentially lists with constructors and type info"))
        (item (code (write)) (t "and") (code (read))
              (t "handle structs elegantly")))
 
