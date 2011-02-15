@@ -1,0 +1,2 @@
+Substitution finished at 1679362
+Brute force finished at 2872084
